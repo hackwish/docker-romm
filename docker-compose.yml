@@ -1,0 +1,39 @@
+version: "3"
+services:
+    romm:
+        image: rommapp/romm:latest
+        container_name: romm
+        restart: unless-stopped
+        environment:
+          SET_CONTAINER_TIMEZONE: 'true'
+          CONTAINER_TIMEZONE: America/Santiago
+        volumes:
+            - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
+            - romm_redis_data:/redis-data # Cached data for background tasks
+        ports:
+            - 8060:8080
+        depends_on:
+            romm-db:
+                condition: service_healthy
+                restart: true
+
+    romm-db:
+        image: mariadb:latest
+        container_name: romm-db
+        restart: unless-stopped
+        environment:
+          SET_CONTAINER_TIMEZONE: 'true'
+          CONTAINER_TIMEZONE: America/Santiago
+        volumes:
+            - mysql_data:/var/lib/mysql
+        healthcheck:
+            test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+            start_period: 30s
+            start_interval: 10s
+            interval: 10s
+            timeout: 5s
+            retries: 5
+volumes:
+    mysql_data:
+    romm_resources:
+    romm_redis_data:
