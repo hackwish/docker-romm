@@ -14,12 +14,12 @@ services:
             - LAUNCHBOX_API_ENABLED=true
             - PLAYMATCH_API_ENABLED=true
         volumes:
-            - /path/to/library:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
-            - /path/to/assets:/romm/assets # Uploaded saves, states, etc.
-            - /path/to/config:/romm/config # Path where config.yml is stored
+            - ./library:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
   romm-db:
         environment:
             - MARIADB_ROOT_PASSWORD= # Use a unique, secure password
             - MARIADB_DATABASE=romm
             - MARIADB_USER=romm-user
             - MARIADB_PASSWORD=
+volumes:
+    library:

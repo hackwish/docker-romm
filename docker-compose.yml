@@ -10,6 +10,8 @@ services:
         volumes:
             - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
             - romm_redis_data:/redis-data # Cached data for background tasks
+            - ./assets:/romm/assets # Uploaded saves, states, etc.
+            - ./config:/romm/config # Path where config.yml is stored
         ports:
             - 8060:8080
         depends_on:
@@ -37,3 +39,5 @@ volumes:
     mysql_data:
     romm_resources:
     romm_redis_data:
+    assets:
+    config:
