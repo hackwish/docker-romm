@@ -1,5 +1,5 @@
 services:
-  romm:
+    romm:
         environment:
             - DB_HOST=romm-db
             - DB_NAME=romm # Should match MARIADB_DATABASE in mariadb
@@ -15,11 +15,25 @@ services:
             - PLAYMATCH_API_ENABLED=true
         volumes:
             - ./library:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
-  romm-db:
+    romm-db:
         environment:
             - MARIADB_ROOT_PASSWORD= # Use a unique, secure password
             - MARIADB_DATABASE=romm
             - MARIADB_USER=romm-user
             - MARIADB_PASSWORD=
+    gaseous-server:
+        environment:
+            - dbhost=gsdb
+            - dbuser=root
+            - dbpass=gaseous
+            - igdbclientid=<clientid>
+            - igdbclientsecret=<client
+        volumes:
+            - ./library:/games
+    gaseous-db:
+        environment:
+            - MARIADB_ROOT_PASSWORD=gaseous
+            - MARIADB_USER=gaseous
+            - MARIADB_PASSWORD=gaseous
 volumes:
     library:

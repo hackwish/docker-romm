@@ -5,8 +5,9 @@ services:
         container_name: romm
         restart: unless-stopped
         environment:
-          SET_CONTAINER_TIMEZONE: 'true'
-          CONTAINER_TIMEZONE: America/Santiago
+            SET_CONTAINER_TIMEZONE: 'true'
+            CONTAINER_TIMEZONE: America/Santiago
+            TZ: America/Santiago
         volumes:
             - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
             - romm_redis_data:/redis-data # Cached data for background tasks
@@ -24,8 +25,9 @@ services:
         container_name: romm-db
         restart: unless-stopped
         environment:
-          SET_CONTAINER_TIMEZONE: 'true'
-          CONTAINER_TIMEZONE: America/Santiago
+            SET_CONTAINER_TIMEZONE: 'true'
+            CONTAINER_TIMEZONE: America/Santiago
+            TZ: America/Santiago
         volumes:
             - mysql_data:/var/lib/mysql
         healthcheck:
@@ -35,9 +37,35 @@ services:
             interval: 10s
             timeout: 5s
             retries: 5
+    gaseous-server:
+        container_name: gaseous-server
+        image: gaseousgames/gaseousserver:latest
+        restart: unless-stopped
+        depends_on:
+            - gaseous-db
+        ports:
+            - 5198:80
+        volumes:
+            - gs:/root/.gaseous-server
+        environment:
+            SET_CONTAINER_TIMEZONE: 'true'
+            CONTAINER_TIMEZONE: America/Santiago
+            TZ: America/Santiago
+    gaseous-db:
+        container_name: gaseous-db
+        image: mariadb
+        restart: unless-stopped
+        volumes:
+            - ./gsdb:/var/lib/mysql
+        environment:
+            SET_CONTAINER_TIMEZONE: 'true'
+            CONTAINER_TIMEZONE: America/Santiago
+            TZ: America/Santiago
 volumes:
     mysql_data:
     romm_resources:
     romm_redis_data:
     assets:
     config:
+    gsdb:
+    gs:
