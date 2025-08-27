@@ -53,14 +53,21 @@ services:
             TZ: America/Santiago
     gaseous-db:
         container_name: gaseous-db
-        image: mariadb
+        image: mariadb:latest
         restart: unless-stopped
         volumes:
-            - ./gsdb:/var/lib/mysql
+            - gsdb:/var/lib/mysql
         environment:
             SET_CONTAINER_TIMEZONE: 'true'
             CONTAINER_TIMEZONE: America/Santiago
             TZ: America/Santiago
+        healthcheck:
+            test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+            start_period: 30s
+            start_interval: 10s
+            interval: 10s
+            timeout: 5s
+            retries: 5
 volumes:
     mysql_data:
     romm_resources:

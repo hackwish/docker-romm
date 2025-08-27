@@ -23,7 +23,7 @@ services:
             - MARIADB_PASSWORD=
     gaseous-server:
         environment:
-            - dbhost=gsdb
+            - dbhost=gaseous-db
             - dbuser=root
             - dbpass=gaseous
             - igdbclientid=<clientid>
